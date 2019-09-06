@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="jquery-ui-themes-1.12.1/themes/base/jquery-ui.min.css">
+    
+    <script>
+        function createConfirm(psMessage, pfOK, pfCancel, psOK, psCancel, psTitle) {
+            // ダイアログ用要素生成
+            var x = $("<div></div>").dialog({ autoOpen: false });
+            // メッセージ設定
+            x.html(psMessage);
+
+            // ボタン処理設定
+            var ok = psOK;
+            var cancel = psCancel;
+            var buttons = {};
+            buttons[ok] = function () {
+                pfOK();
+                $(this).dialog("close");
+            }
+            buttons[cancel] = function () {
+                pfCancel();
+                $(this).dialog("close");
+            }
+
+            // ダイアログ設定
+            x.dialog({
+                modal: true,
+                buttons: buttons,
+                title: psTitle,
+                close: function () {
+                    // ダイアログを閉じたときに要素を削除
+                    $(this).remove();
+                }
+            });
+
+            // ダイアログ表示
+            x.dialog("open");
+        }
+
+        $(function () {
+            $("#push").click(function () {
+                $("#text").html($("#test").val());
+            });
+            $("#txtArea").keypress(function (e) {
+                var row = $(this).attr("rows");
+                var r = $(this).val().split("\n").length;
+                console.log(r);
+                if (r >= row && e.keyCode == 13) {
+                    return false;
+                }
+            });
+            $("#dialogButton").click(function () {
+                // ダイアログ用要素生成
+                var x = $("<div></div>").dialog({ autoOpen: false });
+                // メッセージ設定
+                x.html("ポップアップのテスト");
+
+                // ダイアログ設定
+                x.dialog({
+                    modal: true, // モーダル化
+                    buttons: {
+                        "はい": function () {
+                            alert("はいが押されました");
+                            $(this).dialog("close"); // ダイアログを閉じる
+                        },
+                        "いいえ": function () {
+                            alert("いいえが押されました");
+                            $(this).dialog("close"); // ダイアログを閉じる
+                        },
+                        "キャンセル": function () {
+                            $(this).dialog("close"); // ダイアログを閉じる
+                        }
+                    },
+                    title: "タイトル",
+                    close: function () {
+                        // ダイアログを閉じたときに要素を削除
+                        $(this).remove();
+                    }
+                });
+
+                // ダイアログ表示
+                x.dialog("open");
+            });
+            $("#dialogButton2").click(function () {
+                createConfirm("ポップアップのテスト",
+                    function () {
+                        alert("はいが押されました")
+                    },
+                    function () {
+                        alert("いいえが押されました")
+                    },
+                    "はい",
+                    "いいえ",
+                    "テスト");
+            });
+            $("#dialogButton3").click(function () {
+                confirm("ダイアログテスト");
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <input id="test" type="text">
+    <input id="push" type="button" value="push">
+    <table>
+        <tr>
+            <td id="p">ようこそ！</td>
+            <td id="text"></td>
+        </tr>
+    </table>
+    <textarea id="txtArea" rows="3" cols="30" wrap="hard"></textarea>
+    <br>
+    <input id="dialogButton" type="button" value="ダイアログテスト">
+    <input id="dialogButton2" type="button" value="ダイアログテスト2">
+    <input id="dialogButton3" type="button" value="ダイアログテスト3">
+
+    <div id="dialog1" style="display: none">ポップアップのテスト</div><br>
+    <input type="file" name="fileTEST">
+
+    <script src="https://gist.github.com/ZakkyR/14bafd63a207917c591d6a5c4c5c1c7d.js"></script>
+</body>
+
+</html>
